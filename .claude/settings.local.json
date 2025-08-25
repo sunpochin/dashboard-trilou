@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn add recharts)",
+      "Bash(yarn add:*)",
+      "Bash(yarn dev)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
