@@ -3,7 +3,8 @@
     "allow": [
       "Bash(yarn add recharts)",
       "Bash(yarn add:*)",
-      "Bash(yarn dev)"
+      "Bash(yarn dev)",
+      "Read(//Users/pac/codes/trilou/**)"
     ],
     "deny": [],
     "ask": []
