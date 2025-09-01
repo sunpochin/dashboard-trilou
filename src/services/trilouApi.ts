@@ -1,5 +1,14 @@
+/**
+ * Trilou API 服務模組
+ * 負責與 Supabase 資料庫互動，提供任務列表和卡片的 CRUD 操作
+ * 包含儀表板統計資料的計算與彙整功能
+ */
 import { supabase } from '../lib/supabaseClient';
 
+/**
+ * 卡片資料介面
+ * 代表任務管理系統中的單一任務項目
+ */
 export interface Card {
   id: string;
   title: string;
@@ -10,6 +19,10 @@ export interface Card {
   created_at?: string;
 }
 
+/**
+ * 列表資料介面
+ * 代表任務管理系統中的任務分類或群組
+ */
 export interface List {
   id: string;
   title: string;
@@ -18,6 +31,10 @@ export interface List {
   created_at?: string;
 }
 
+/**
+ * 儀表板統計資料介面
+ * 包含所有用於視覺化展示的統計數據
+ */
 export interface DashboardStats {
   totalLists: number;
   totalCards: number;
@@ -27,7 +44,16 @@ export interface DashboardStats {
   completionRate: number;
 }
 
+/**
+ * Trilou API 服務類別
+ * 封裝所有與 Supabase 資料庫互動的方法
+ */
 class TrilouApiService {
+  /**
+   * 獲取當前用戶的所有任務列表
+   * 從 Supabase 查詢 lists 表，並按照 position 排序
+   * @returns 任務列表陣列
+   */
   async fetchLists(): Promise<List[]> {
     try {
       // 獲取當前用戶
@@ -56,6 +82,12 @@ class TrilouApiService {
     }
   }
 
+  /**
+   * 獲取卡片資料
+   * 可選擇性地按列表 ID 篩選，確保只返回當前用戶的卡片
+   * @param listId - 可選的列表 ID，用於篩選特定列表的卡片
+   * @returns 卡片陣列
+   */
   async fetchCards(listId?: string): Promise<Card[]> {
     try {
       // 獲取當前用戶
@@ -107,6 +139,11 @@ class TrilouApiService {
     }
   }
 
+  /**
+   * 獲取儀表板統計資料
+   * 彙整列表和卡片資料，計算各種統計指標
+   * @returns 包含總數、狀態分布、活動趨勢等統計資料
+   */
   async getDashboardStats(): Promise<DashboardStats> {
     try {
       const [lists, cards] = await Promise.all([
@@ -173,6 +210,12 @@ class TrilouApiService {
     }
   }
 
+  /**
+   * 生成月度活動趨勢資料
+   * 分析過去 6 個月的卡片創建和完成情況
+   * @param cards - 所有卡片資料
+   * @returns 月度活動統計陣列
+   */
   private generateMonthlyActivity(cards: Card[]): { date: string; cards: number; completed: number }[] {
     const now = new Date();
     const months = [];

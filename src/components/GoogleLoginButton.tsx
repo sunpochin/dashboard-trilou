@@ -1,3 +1,8 @@
+/**
+ * Google 登入按鈕組件
+ * 提供使用 Google OAuth 進行第三方登入的功能
+ * 整合 Supabase 認證服務，實現單一登入（SSO）
+ */
 import React from 'react';
 import { supabase } from '../lib/supabaseClient';
 
@@ -6,6 +11,10 @@ interface GoogleLoginButtonProps {
 }
 
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
+  /**
+   * 處理 Google OAuth 登入流程
+   * 呼叫 Supabase 的 OAuth 認證服務，成功後會重新導向回應用程式
+   */
   const handleGoogleLogin = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({

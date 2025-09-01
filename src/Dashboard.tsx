@@ -1,3 +1,8 @@
+/**
+ * Dashboard 主控台組件
+ * 顯示 Trilou 任務管理系統的統計資料和視覺化圖表
+ * 包含總覽統計卡片、列表活動長條圖、卡片狀態圓餅圖、月度趨勢折線圖
+ */
 import React, { useState, useEffect } from 'react';
 import {
   BarChart,
@@ -22,6 +27,10 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    /**
+     * 載入 Dashboard 統計資料
+     * 從 Trilou API 獲取列表、卡片、完成率等統計數據
+     */
     const loadDashboardData = async () => {
       try {
         setLoading(true);

@@ -1,3 +1,8 @@
+/**
+ * 主應用程式組件
+ * 負責處理用戶認證狀態的顯示邏輯，包含載入中、未登入、已登入三種狀態的頁面呈現
+ * 未登入時顯示登入頁面，已登入時顯示 Dashboard 並提供登出功能
+ */
 import Dashboard from './Dashboard'
 import GoogleLoginButton from './components/GoogleLoginButton'
 import { useAuth } from './hooks/useAuth'
