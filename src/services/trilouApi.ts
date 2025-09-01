@@ -125,6 +125,29 @@ class TrilouApiService {
   }
 
   /**
+   * 判斷卡片是否已完成
+   * 檢查卡片狀態或是否在 done 列表中
+   */
+  private isCardCompleted(card: Card, doneListIds: Set<string>): boolean {
+    const status = card.status?.trim().toLowerCase();
+    return status === 'done' || 
+           status === 'completed' || 
+           card.status === '已完成' ||
+           doneListIds.has(card.list_id);
+  }
+
+  /**
+   * 獲取所有完成列表的 ID 集合
+   */
+  private getDoneListIds(lists: List[]): Set<string> {
+    return new Set(
+      lists
+        .filter(list => list.title.trim().toLowerCase() === 'done')
+        .map(list => list.id)
+    );
+  }
+
+  /**
    * 獲取儀表板統計資料
    * 彙整列表和卡片資料，計算各種統計指標
    * @returns 包含總數、狀態分布、活動趨勢等統計資料
@@ -161,18 +184,15 @@ class TrilouApiService {
         };
       });
 
-      // 基於真實創建時間的月度活動數據
-      const monthlyActivity = this.generateMonthlyActivity(cards, lists);
-
-      // 計算完成率（假設有 'done' 或 '已完成' 狀態的卡片為已完成，或卡片在名為 'done' 的列表中）
-      const doneLists = lists.filter(list => list.title.toLowerCase() === 'done');
-      const doneListIds = doneLists.map(list => list.id);
+      // 獲取完成列表 ID 集合
+      const doneListIds = this.getDoneListIds(lists);
       
+      // 基於真實創建時間的月度活動數據
+      const monthlyActivity = this.generateMonthlyActivity(cards, doneListIds);
+
+      // 計算完成率
       const completedCards = cards.filter(card => 
-        card.status === 'done' || 
-        card.status === '已完成' || 
-        card.status === 'completed' ||
-        doneListIds.includes(card.list_id)
+        this.isCardCompleted(card, doneListIds)
       ).length;
       const completionRate = cards.length > 0 ? Math.round((completedCards / cards.length) * 100) : 0;
 
@@ -203,14 +223,12 @@ class TrilouApiService {
    * 生成月度活動趨勢資料
    * 分析過去 6 個月的卡片創建和完成情況
    * @param cards - 所有卡片資料
-   * @param lists - 所有列表資料，用於檢查 'done' 列表
+   * @param doneListIds - 完成列表的 ID 集合
    * @returns 月度活動統計陣列
    */
-  private generateMonthlyActivity(cards: Card[], lists: List[]): { date: string; cards: number; completed: number }[] {
+  private generateMonthlyActivity(cards: Card[], doneListIds: Set<string>): { date: string; cards: number; completed: number }[] {
     const now = new Date();
     const months = [];
-    const doneLists = lists.filter(list => list.title.toLowerCase() === 'done');
-    const doneListIds = doneLists.map(list => list.id);
     
     // 生成過去6個月的數據
     for (let i = 5; i >= 0; i--) {
@@ -227,10 +245,7 @@ class TrilouApiService {
 
       // 計算該月完成的卡片數（假設完成時間等於創建時間）
       const completedCards = monthCards.filter(card => 
-        card.status === 'done' || 
-        card.status === '已完成' || 
-        card.status === 'completed' ||
-        doneListIds.includes(card.list_id)
+        this.isCardCompleted(card, doneListIds)
       );
 
       months.push({
