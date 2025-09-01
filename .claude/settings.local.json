@@ -4,7 +4,10 @@
       "Bash(yarn add recharts)",
       "Bash(yarn add:*)",
       "Bash(yarn dev)",
-      "Read(//Users/pac/codes/trilou/**)"
+      "Read(//Users/pac/codes/trilou/**)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []
