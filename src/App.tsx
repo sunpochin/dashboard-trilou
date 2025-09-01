@@ -8,7 +8,7 @@ import Dashboard from './Dashboard'
 import { useAuth } from './hooks/useAuth'
 
 function App() {
-  const { user, loading, signOut } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
