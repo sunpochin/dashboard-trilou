@@ -50,23 +50,9 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        backgroundColor: '#f5f5f5' 
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            width: '50px', 
-            height: '50px', 
-            border: '3px solid #f3f3f3', 
-            borderTop: '3px solid #3498db', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }} />
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
           <p>載入 Trilou 資料中...</p>
         </div>
       </div>
@@ -75,24 +61,11 @@ const Dashboard: React.FC = () => {
 
   if (error || !stats) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        backgroundColor: '#f5f5f5' 
-      }}>
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '40px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center',
-          maxWidth: '500px'
-        }}>
-          <h2 style={{ color: '#e74c3c', marginBottom: '20px' }}>⚠️ 連線錯誤</h2>
-          <p style={{ marginBottom: '20px' }}>{error || '載入資料時發生錯誤'}</p>
-          <p style={{ fontSize: '14px', color: '#666' }}>
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="bg-white p-10 rounded-lg shadow-md text-center max-w-lg">
+          <h2 className="text-red-500 text-xl font-semibold mb-4">⚠️ 連線錯誤</h2>
+          <p className="mb-4">{error || '載入資料時發生錯誤'}</p>
+          <p className="text-sm text-gray-600">
             請確認：<br/>
             1. trilou 服務正在運行（localhost:3000）<br/>
             2. 網路連線正常<br/>
@@ -100,15 +73,7 @@ const Dashboard: React.FC = () => {
           </p>
           <button 
             onClick={() => window.location.reload()} 
-            style={{
-              marginTop: '20px',
-              padding: '10px 20px',
-              backgroundColor: '#3498db',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
+            className="mt-5 px-5 py-2.5 bg-blue-500 text-white border-none rounded cursor-pointer hover:bg-blue-600"
           >
             重新載入
           </button>
@@ -118,72 +83,40 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-      <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '30px' }}>
+    <div className="p-5 bg-gray-500 min-h-screen w-1/2">
+      <h1 className="text-center text-gray-800 text-3xl font-bold mb-8">
         Trilou Dashboard
       </h1>
       
       {/* 統計卡片 */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: '20px', 
-        marginBottom: '30px' 
-      }}>
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#666' }}>總列表數</h3>
-          <p style={{ fontSize: '32px', fontWeight: 'bold', margin: '0', color: '#333' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">總列表數</h3>
+          <p className="text-3xl font-bold m-0 text-gray-800">
             {stats.totalLists}
           </p>
         </div>
         
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#666' }}>總卡片數</h3>
-          <p style={{ fontSize: '32px', fontWeight: 'bold', margin: '0', color: '#333' }}>
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">總卡片數</h3>
+          <p className="text-3xl font-bold m-0 text-gray-800">
             {stats.totalCards}
           </p>
         </div>
         
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#666' }}>完成率</h3>
-          <p style={{ fontSize: '32px', fontWeight: 'bold', margin: '0', color: '#4CAF50' }}>
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">完成率</h3>
+          <p className="text-3xl font-bold m-0 text-green-500">
             {stats.completionRate}%
           </p>
         </div>
       </div>
 
       {/* 圖表區域 */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
-        gap: '20px' 
-      }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* 列表卡片數量統計 */}
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
-        }}>
-          <h3 style={{ marginBottom: '20px', color: '#333' }}>各列表卡片數量</h3>
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">各列表卡片數量</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.listActivity}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -197,13 +130,8 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* 卡片狀態分布 */}
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)' 
-        }}>
-          <h3 style={{ marginBottom: '20px', color: '#333' }}>卡片狀態分布</h3>
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">卡片狀態分布</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -226,14 +154,8 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* 活動趨勢 */}
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          gridColumn: '1 / -1'
-        }}>
-          <h3 style={{ marginBottom: '20px', color: '#333' }}>月度活動趨勢</h3>
+        <div className="bg-white p-5 rounded-lg shadow lg:col-span-2">
+          <h3 className="mb-5 text-gray-800">月度活動趨勢</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={stats.monthlyActivity}>
               <CartesianGrid strokeDasharray="3 3" />
