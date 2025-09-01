@@ -36,30 +36,30 @@ function App() {
     );
   }
 
-  if (!user) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        backgroundColor: '#f5f5f5' 
-      }}>
-        <div style={{ 
-          backgroundColor: 'white', 
-          padding: '40px', 
-          borderRadius: '12px', 
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-          textAlign: 'center',
-          maxWidth: '400px'
-        }}>
-          <h1 style={{ marginBottom: '10px', color: '#333' }}>Trilou Dashboard</h1>
-          <p style={{ marginBottom: '30px', color: '#666' }}>請登入以查看您的統計資料</p>
-          <GoogleLoginButton />
-        </div>
-      </div>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <div style={{ 
+  //       display: 'flex', 
+  //       justifyContent: 'center', 
+  //       alignItems: 'center', 
+  //       height: '100vh', 
+  //       backgroundColor: '#f5f5f5' 
+  //     }}>
+  //       <div style={{ 
+  //         backgroundColor: 'white', 
+  //         padding: '40px', 
+  //         borderRadius: '12px', 
+  //         boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+  //         textAlign: 'center',
+  //         maxWidth: '400px'
+  //       }}>
+  //         <h1 style={{ marginBottom: '10px', color: '#333' }}>Trilou Dashboard</h1>
+  //         <p style={{ marginBottom: '30px', color: '#666' }}>請登入以查看您的統計資料</p>
+  //         <GoogleLoginButton />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -76,24 +76,6 @@ function App() {
         borderRadius: '0 0 0 12px',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}>
-        <span style={{ color: '#666', fontSize: '14px' }}>
-          {user.email}
-        </span>
-        <button
-          onClick={signOut}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: '#e74c3c',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}
-        >
-          登出
-        </button>
       </div>
       <Dashboard />
     </>

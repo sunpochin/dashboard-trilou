@@ -56,18 +56,10 @@ class TrilouApiService {
    */
   async fetchLists(): Promise<List[]> {
     try {
-      // 獲取當前用戶
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        console.error('User not authenticated:', userError);
-        return [];
-      }
-
       // 直接從 Supabase 查詢 lists 表
       const { data, error } = await supabase
         .from('lists')
         .select('id, title, position, user_id, created_at')
-        .eq('user_id', user.id)
         .order('position', { ascending: true });
 
       if (error) {
@@ -90,13 +82,6 @@ class TrilouApiService {
    */
   async fetchCards(listId?: string): Promise<Card[]> {
     try {
-      // 獲取當前用戶
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        console.error('User not authenticated:', userError);
-        return [];
-      }
-
       // 建構查詢：使用 JOIN 確保只取得該用戶的卡片
       let query = supabase
         .from('cards')
@@ -110,7 +95,7 @@ class TrilouApiService {
           created_at,
           lists!inner(user_id)
         `)
-        .eq('lists.user_id', user.id)
+        // .eq('lists.user_id', user.id)
         .order('list_id', { ascending: true })
         .order('position', { ascending: true });
 
