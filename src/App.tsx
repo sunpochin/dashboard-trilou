@@ -6,7 +6,6 @@
 import Dashboard from './Dashboard'
 // import GoogleLoginButton from './components/GoogleLoginButton'
 import { useAuth } from './hooks/useAuth'
-import './App.css'
 
 function App() {
   const { user, loading, signOut } = useAuth();

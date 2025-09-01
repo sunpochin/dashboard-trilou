@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-5 bg-gray-500 min-h-screen w-1/2">
+    <div className="p-5 bg-gray-200 min-h-screen w-full">
       <h1 className="text-center text-gray-800 text-3xl font-bold mb-8">
         Trilou Dashboard
       </h1>

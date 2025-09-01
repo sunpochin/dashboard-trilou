@@ -10,7 +10,8 @@
       "Bash(npx tsc:*)",
       "Bash(npm install:*)",
       "Bash(npx tailwindcss init:*)",
-      "Bash(yarn tailwindcss init:*)"
+      "Bash(yarn tailwindcss init:*)",
+      "Bash(yarn list:*)"
     ],
     "deny": [],
     "ask": []
