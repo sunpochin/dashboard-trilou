@@ -7,7 +7,11 @@
       "Read(//Users/pac/codes/trilou/**)",
       "Bash(npm run typecheck:*)",
       "Bash(npm run:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(yarn tailwindcss init:*)",
+      "Bash(yarn list:*)"
     ],
     "deny": [],
     "ask": []

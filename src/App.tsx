@@ -4,9 +4,8 @@
  * 未登入時顯示登入頁面，已登入時顯示 Dashboard 並提供登出功能
  */
 import Dashboard from './Dashboard'
-import GoogleLoginButton from './components/GoogleLoginButton'
+// import GoogleLoginButton from './components/GoogleLoginButton'
 import { useAuth } from './hooks/useAuth'
-import './App.css'
 
 function App() {
   const { user, loading, signOut } = useAuth();
@@ -63,20 +62,6 @@ function App() {
 
   return (
     <>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        padding: '20px',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-        backgroundColor: 'white',
-        borderRadius: '0 0 0 12px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-      </div>
       <Dashboard />
     </>
   );
