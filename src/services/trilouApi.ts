@@ -16,6 +16,7 @@ export interface Card {
   position?: number;
   list_id: string;
   status?: string;
+  priority?: string;
   created_at?: string;
 }
 
@@ -39,6 +40,7 @@ export interface DashboardStats {
   totalLists: number;
   totalCards: number;
   cardsByStatus: { name: string; value: number; color: string }[];
+  cardsByPriority: { name: string; value: number; color: string }[];
   listActivity: { name: string; cards: number }[];
   monthlyActivity: { date: string; cards: number; completed: number }[];
   completionRate: number;
@@ -92,6 +94,7 @@ class TrilouApiService {
           position,
           list_id,
           status,
+          priority,
           created_at,
           lists!inner(user_id)
         `)
@@ -113,7 +116,7 @@ class TrilouApiService {
 
       // 清理回傳資料：移除 JOIN 的額外欄位
       const cleanedData = data?.map(card => {
-        const { lists, ...cardData } = card as any;
+        const { lists, ...cardData } = card as Card & { lists: any };
         return cardData;
       }) || [];
 
@@ -175,6 +178,22 @@ class TrilouApiService {
         };
       });
 
+      // 計算卡片優先度分布
+      const priorityCounts = cards.reduce((acc, card) => {
+        const priority = card.priority || '未設定';
+        acc[priority] = (acc[priority] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const cardsByPriority = Object.entries(priorityCounts).map(([priority, count], index) => {
+        const priorityColors = ['#ff4444', '#ff8c00', '#32cd32', '#87ceeb'];
+        return {
+          name: priority,
+          value: count,
+          color: priorityColors[index % priorityColors.length]
+        };
+      });
+
       // 計算各列表的卡片數量
       const listCardCounts = lists.map(list => {
         const cardCount = cards.filter(card => card.list_id === list.id).length;
@@ -200,6 +219,7 @@ class TrilouApiService {
         totalLists: lists.length,
         totalCards: cards.length,
         cardsByStatus,
+        cardsByPriority,
         listActivity: listCardCounts,
         monthlyActivity,
         completionRate
@@ -212,6 +232,7 @@ class TrilouApiService {
         totalLists: 0,
         totalCards: 0,
         cardsByStatus: [],
+        cardsByPriority: [],
         listActivity: [],
         monthlyActivity: [],
         completionRate: 0

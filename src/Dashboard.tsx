@@ -113,7 +113,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* 圖表區域 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* 列表卡片數量統計 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">各列表卡片數量</h3>
@@ -153,8 +153,32 @@ const Dashboard: React.FC = () => {
           </ResponsiveContainer>
         </div>
 
+        {/* 卡片優先度分布 */}
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">卡片優先度分布</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={stats.cardsByPriority}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {stats.cardsByPriority.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
         {/* 活動趨勢 */}
-        <div className="bg-white p-5 rounded-lg shadow lg:col-span-2">
+        <div className="bg-white p-5 rounded-lg shadow lg:col-span-3">
           <h3 className="mb-5 text-gray-800">月度活動趨勢</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={stats.monthlyActivity}>
