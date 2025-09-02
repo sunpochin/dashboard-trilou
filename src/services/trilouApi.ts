@@ -126,7 +126,7 @@ class TrilouApiService {
       const cleanedData = data?.map(card => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { lists, ...cardData } = card as Record<string, unknown>;
-        return cardData as Card;
+        return cardData as unknown as Card;
       }) || [];
 
       return cleanedData;
