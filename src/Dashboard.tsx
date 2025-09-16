@@ -120,22 +120,74 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* 圖表區域 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* 列表卡片數量統計 */}
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="mb-5 text-gray-800">各列表卡片數量</h3>
+
+      {/* 趨勢圖表區域 - 放在最上面 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+        {/* 每日生產力趨勢 */}
+        <div className="bg-white p-5 rounded-lg shadow lg:col-span-3">
+          <h3 className="mb-5 text-gray-800">每日生產力趨勢（過去14天）</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={stats.listActivity}>
+            <LineChart data={stats.workEfficiency.dailyProductivity}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="cards" fill="#8884d8" />
+              <Line type="monotone" dataKey="created" stroke="#8884d8" name="新增任務" />
+              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成任務" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* 優先度效率分析 */}
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">優先度完成效率</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={stats.workEfficiency.priorityEfficiency}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="priority" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="avgDays" fill="#ff7c7c" name="平均完成天數" />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
+        {/* 週生產力趨勢 */}
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">週生產力趨勢</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={stats.workEfficiency.weeklyTrend}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="week" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="productivity" fill="#32cd32" name="生產力 %" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* 月度活動趨勢 */}
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h3 className="mb-5 text-gray-800">月度活動趨勢</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={stats.monthlyActivity}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="cards" stroke="#8884d8" name="新增卡片" />
+              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成卡片" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* 狀態和優先度分布圖表 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* 卡片狀態分布 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">卡片狀態分布</h3>
@@ -183,69 +235,28 @@ const Dashboard: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-
-        {/* 每日生產力趨勢 */}
-        <div className="bg-white p-5 rounded-lg shadow lg:col-span-3">
-          <h3 className="mb-5 text-gray-800">每日生產力趨勢（過去14天）</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={stats.workEfficiency.dailyProductivity}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="created" stroke="#8884d8" name="新增任務" />
-              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成任務" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* 優先度效率分析 */}
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="mb-5 text-gray-800">優先度完成效率</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={stats.workEfficiency.priorityEfficiency}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="priority" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="avgDays" fill="#ff7c7c" name="平均完成天數" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* 週生產力趨勢 */}
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="mb-5 text-gray-800">週生產力趨勢</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={stats.workEfficiency.weeklyTrend}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="week" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="productivity" fill="#32cd32" name="生產力 %" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* 活動趨勢 */}
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="mb-5 text-gray-800">月度活動趨勢</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={stats.monthlyActivity}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="cards" stroke="#8884d8" name="新增卡片" />
-              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成卡片" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
       </div>
+
+      {/* 列表卡片數量統計 - 佔滿整個寬度 */}
+      <div className="bg-white p-5 rounded-lg shadow mb-8">
+        <h3 className="mb-5 text-gray-800">各列表卡片數量</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={stats.listActivity}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="name"
+              angle={-45}
+              textAnchor="end"
+              height={80}
+            />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="cards" fill="#8884d8" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
     </div>
   );
 };
