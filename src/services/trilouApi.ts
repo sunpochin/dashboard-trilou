@@ -215,14 +215,8 @@ class TrilouApiService {
     inProgressListIds: Set<string>
   ): boolean {
     const status = card.status?.trim().toLowerCase()
-    return (
-      status === 'doing' ||
-      status === 'in progress' ||
-      status === 'in_progress' ||
-      status === 'progress' ||
-      card.status === '進行中' ||
-      inProgressListIds.has(card.list_id)
-    )
+    void inProgressListIds
+    return status === 'doing'
   }
 
   /**
@@ -293,6 +287,7 @@ class TrilouApiService {
     doneListIds: Set<string>,
     inProgressListIds: Set<string>
   ): WorkEfficiencyStats {
+    void inProgressListIds
     const completedCards = cards.filter((card) =>
       this.isCardCompleted(card, doneListIds)
     )
@@ -350,8 +345,8 @@ class TrilouApiService {
     const now = new Date()
     const wipCards = cards.filter(
       (card) =>
-        !this.isCardCompleted(card, doneListIds) &&
-        this.isCardInProgress(card, inProgressListIds)
+        // !this.isCardCompleted(card, doneListIds) &&
+        card.status?.trim().toLowerCase() === 'doing'
     )
     const agingWip = wipCards.filter((card) => {
       if (!card.created_at) return false
