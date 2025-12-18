@@ -3,7 +3,7 @@
  * 顯示 Trilou 任務管理系統的統計資料和視覺化圖表
  * 包含總覽統計卡片、列表活動長條圖、卡片狀態圓餅圖、月度趨勢折線圖
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   BarChart,
   Bar,
@@ -17,14 +17,14 @@ import {
   Cell,
   LineChart,
   Line,
-  ResponsiveContainer
-} from 'recharts';
-import { trilouApi, type DashboardStats } from './services/trilouApi';
+  ResponsiveContainer,
+} from 'recharts'
+import { trilouApi, type DashboardStats } from './services/trilouApi'
 
 const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     /**
@@ -33,20 +33,22 @@ const Dashboard: React.FC = () => {
      */
     const loadDashboardData = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const dashboardStats = await trilouApi.getDashboardStats();
-        setStats(dashboardStats);
+        setLoading(true)
+        setError(null)
+        const dashboardStats = await trilouApi.getDashboardStats()
+        setStats(dashboardStats)
       } catch (err) {
-        setError('無法載入 dashboard 資料，請確認 trilou 服務是否運行在 localhost:3000');
-        console.error('Dashboard loading error:', err);
+        setError(
+          '無法載入 dashboard 資料，請確認 trilou 服務是否運行在 localhost:3000'
+        )
+        console.error('Dashboard loading error:', err)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    loadDashboardData();
-  }, []);
+    loadDashboardData()
+  }, [])
 
   if (loading) {
     return (
@@ -56,30 +58,35 @@ const Dashboard: React.FC = () => {
           <p>載入 Trilou 資料中...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (error || !stats) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
         <div className="bg-white p-10 rounded-lg shadow-md text-center max-w-lg">
-          <h2 className="text-red-500 text-xl font-semibold mb-4">⚠️ 連線錯誤</h2>
+          <h2 className="text-red-500 text-xl font-semibold mb-4">
+            ⚠️ 連線錯誤
+          </h2>
           <p className="mb-4">{error || '載入資料時發生錯誤'}</p>
           <p className="text-sm text-gray-600">
-            請確認：<br/>
-            1. trilou 服務正在運行（localhost:3000）<br/>
-            2. 網路連線正常<br/>
+            請確認：
+            <br />
+            1. trilou 服務正在運行（localhost:3000）
+            <br />
+            2. 網路連線正常
+            <br />
             3. API 端點可以正常存取
           </p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-5 px-5 py-2.5 bg-blue-500 text-white border-none rounded cursor-pointer hover:bg-blue-600"
           >
             重新載入
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -87,7 +94,7 @@ const Dashboard: React.FC = () => {
       <h1 className="text-center text-gray-800 text-3xl font-bold mb-8">
         Trilou Dashboard
       </h1>
-      
+
       {/* 統計卡片 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <div className="bg-white p-5 rounded-lg shadow text-center">
@@ -96,25 +103,62 @@ const Dashboard: React.FC = () => {
             {stats.totalLists}
           </p>
         </div>
-        
+
         <div className="bg-white p-5 rounded-lg shadow text-center">
           <h3 className="m-0 mb-2.5 text-gray-600">總卡片數</h3>
           <p className="text-3xl font-bold m-0 text-gray-800">
             {stats.totalCards}
           </p>
         </div>
-        
+
         <div className="bg-white p-5 rounded-lg shadow text-center">
           <h3 className="m-0 mb-2.5 text-gray-600">完成率</h3>
           <p className="text-3xl font-bold m-0 text-green-500">
             {stats.completionRate}%
           </p>
         </div>
-        
+
         <div className="bg-white p-5 rounded-lg shadow text-center">
           <h3 className="m-0 mb-2.5 text-gray-600">近30天效率</h3>
           <p className="text-3xl font-bold m-0 text-blue-500">
             {stats.workEfficiency.averageCompletionRate}%
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">Lead time（平均/中位數）</h3>
+          <p className="text-2xl font-bold m-0 text-gray-800">
+            {stats.workEfficiency.leadTime.averageDays} /{' '}
+            {stats.workEfficiency.leadTime.medianDays} 天
+          </p>
+        </div>
+
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">
+            Cycle time（平均/中位數）
+          </h3>
+          <p className="text-2xl font-bold m-0 text-gray-800">
+            {stats.workEfficiency.cycleTime.averageDays} /{' '}
+            {stats.workEfficiency.cycleTime.medianDays} 天
+          </p>
+        </div>
+
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">WIP（進行中）</h3>
+          <p className="text-3xl font-bold m-0 text-purple-600">
+            {stats.workEfficiency.flow.wip}
+          </p>
+        </div>
+
+        <div className="bg-white p-5 rounded-lg shadow text-center">
+          <h3 className="m-0 mb-2.5 text-gray-600">
+            Aging WIP（&gt;{stats.workEfficiency.flow.agingWip.thresholdDays}
+            天）
+          </h3>
+          <p className="text-3xl font-bold m-0 text-red-500">
+            {stats.workEfficiency.flow.agingWip.count}
           </p>
         </div>
       </div>
@@ -126,30 +170,73 @@ const Dashboard: React.FC = () => {
         {/* 每日生產力趨勢 */}
         <div className="bg-white p-5 rounded-lg shadow lg:col-span-3">
           <h3 className="mb-5 text-gray-800">每日生產力趨勢（過去14天）</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <LineChart data={stats.workEfficiency.dailyProductivity}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="created" stroke="#8884d8" name="新增任務" />
-              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成任務" />
+              <Line
+                type="monotone"
+                dataKey="created"
+                stroke="#8884d8"
+                name="新增任務"
+              />
+              <Line
+                type="monotone"
+                dataKey="completed"
+                stroke="#82ca9d"
+                name="完成任務"
+              />
             </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-5 rounded-lg shadow lg:col-span-3">
+          <h3 className="mb-5 text-gray-800">
+            Weekly Throughput（過去4週完成數）
+          </h3>
+          <ResponsiveContainer
+            width="100%"
+            height={260}
+          >
+            <BarChart data={stats.workEfficiency.flow.weeklyThroughput}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="week" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="completed"
+                fill="#6366f1"
+                name="完成數"
+              />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* 優先度效率分析 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">優先度完成效率</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <BarChart data={stats.workEfficiency.priorityEfficiency}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="priority" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="avgDays" fill="#ff7c7c" name="平均完成天數" />
+              <Bar
+                dataKey="avgDays"
+                fill="#ff7c7c"
+                name="平均完成天數"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -157,14 +244,21 @@ const Dashboard: React.FC = () => {
         {/* 週生產力趨勢 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">週生產力趨勢</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <BarChart data={stats.workEfficiency.weeklyTrend}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="productivity" fill="#32cd32" name="生產力 %" />
+              <Bar
+                dataKey="productivity"
+                fill="#32cd32"
+                name="生產力 %"
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -172,15 +266,28 @@ const Dashboard: React.FC = () => {
         {/* 月度活動趨勢 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">月度活動趨勢</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <LineChart data={stats.monthlyActivity}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="cards" stroke="#8884d8" name="新增卡片" />
-              <Line type="monotone" dataKey="completed" stroke="#82ca9d" name="完成卡片" />
+              <Line
+                type="monotone"
+                dataKey="cards"
+                stroke="#8884d8"
+                name="新增卡片"
+              />
+              <Line
+                type="monotone"
+                dataKey="completed"
+                stroke="#82ca9d"
+                name="完成卡片"
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -191,20 +298,28 @@ const Dashboard: React.FC = () => {
         {/* 卡片狀態分布 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">卡片狀態分布</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <PieChart>
               <Pie
                 data={stats.cardsByStatus}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
+                }
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
               >
                 {stats.cardsByStatus.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -215,20 +330,28 @@ const Dashboard: React.FC = () => {
         {/* 卡片優先度分布 */}
         <div className="bg-white p-5 rounded-lg shadow">
           <h3 className="mb-5 text-gray-800">卡片優先度分布</h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer
+            width="100%"
+            height={300}
+          >
             <PieChart>
               <Pie
                 data={stats.cardsByPriority}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
+                }
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
               >
                 {stats.cardsByPriority.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                  />
                 ))}
               </Pie>
               <Tooltip />
@@ -240,7 +363,10 @@ const Dashboard: React.FC = () => {
       {/* 列表卡片數量統計 - 佔滿整個寬度 */}
       <div className="bg-white p-5 rounded-lg shadow mb-8">
         <h3 className="mb-5 text-gray-800">各列表卡片數量</h3>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer
+          width="100%"
+          height={300}
+        >
           <BarChart data={stats.listActivity}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
@@ -252,13 +378,15 @@ const Dashboard: React.FC = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="cards" fill="#8884d8" />
+            <Bar
+              dataKey="cards"
+              fill="#8884d8"
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
-
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
